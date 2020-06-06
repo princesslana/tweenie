@@ -11,7 +11,7 @@ from torchmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH
 
 THRESHOLD = 0.15
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 def top_elements(array, k):
     ind = np.argpartition(array, -k)[-k:]
@@ -31,13 +31,15 @@ smalld = SmallD()
 
 @smalld.on_message_create()
 def on_message(msg):
-    logging.debug("Message: %s", msg.content)
+    if not msg.content:
+        return
+
     tokenized, _, _ = st.tokenize_sentences([msg.content])
     prediction = model(tokenized)[0]
 
     top = top_elements(prediction, 5)
 
-    logging.debug("".join(str((emojis[t], prediction[t])) for t in top))
+    logging.info("Message: %s, Reacts: %s", msg.content, "".join(str((emojis[t], prediction[t])) for t in top))
 
     for t in top:
         if prediction[t] > THRESHOLD:
