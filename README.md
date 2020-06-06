@@ -1,5 +1,7 @@
 # Tweenie
 
+[![Discord](https://img.shields.io/discord/417389758470422538)](https://discord.gg/3aTVQtz)
+
 Discord bot that uses NLP to add a reaction to messages when appropriate.
 
 Makes use of:
@@ -21,3 +23,7 @@ To run
 ```console
 $ docker run -e SMALLD_TOKEN=<your token here> tweenie:latest
 ```
+
+## Contact
+
+Reach out to the [Discord Projects Hub](https://discord.gg/3aTVQtz)
