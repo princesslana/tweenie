@@ -1,4 +1,5 @@
 import logging
+import time
 import json
 import csv
 import numpy as np
@@ -9,7 +10,9 @@ from torchmoji.sentence_tokenizer import SentenceTokenizer
 from torchmoji.model_def import torchmoji_emojis
 from torchmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH
 
-THRESHOLD = 0.10
+threshold = 0.20
+DECAY = 0.01
+RESET = 0.015
 
 logging.basicConfig(level=logging.INFO)
 
@@ -34,16 +37,22 @@ def on_message(msg):
     if not msg.content:
         return
 
+    global threshold
+     
     tokenized, _, _ = st.tokenize_sentences([msg.content])
     prediction = model(tokenized)[0]
 
     top = top_elements(prediction, 5)
 
-    logging.info("Message: %s, Reacts: %s", msg.content, "".join(str((emojis[t], prediction[t])) for t in top))
+    logging.info("Message: %s, Threshold: %s, Reacts: %s", msg.content, threshold, "".join(str((emojis[t], prediction[t])) for t in top))
 
     for t in top:
-        if prediction[t] > THRESHOLD:
+        if prediction[t] > threshold:
             react_with = emojis[t]
             smalld.put(f"/channels/{msg.channel_id}/messages/{msg.id}/reactions/{react_with}/@me")
+            threshold += RESET
+            time.sleep(1)
+
+    threshold -= DECAY
 
 smalld.run()
