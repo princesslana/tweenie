@@ -3,13 +3,13 @@ import json
 import csv
 import numpy as np
 from emoji import emojis
-from smalld import SmallD
+from smalld import Intent, SmallD
 
 from torchmoji.sentence_tokenizer import SentenceTokenizer
 from torchmoji.model_def import torchmoji_emojis
 from torchmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH
 
-THRESHOLD = 0.15
+THRESHOLD = 0.10
 
 logging.basicConfig(level=logging.INFO)
 
@@ -27,7 +27,7 @@ logging.info('Loading model from %s.', PRETRAINED_PATH)
 model = torchmoji_emojis(PRETRAINED_PATH)
 logging.debug(model)
 
-smalld = SmallD()
+smalld = SmallD(intents=Intent.GUILD_MESSAGES)
 
 @smalld.on_message_create()
 def on_message(msg):
