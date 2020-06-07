@@ -10,9 +10,9 @@ from torchmoji.sentence_tokenizer import SentenceTokenizer
 from torchmoji.model_def import torchmoji_emojis
 from torchmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH
 
-threshold = 0.20
-DECAY = 0.01
-RESET = 0.015
+threshold = 0.15
+DECAY = os.environ.get("TWEENIE_DECAY", 0.004)
+RESET = os.environ.get("TWEENIE_RESET", 0.060)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -35,6 +35,9 @@ smalld = SmallD(intents=Intent.GUILD_MESSAGES)
 @smalld.on_message_create()
 def on_message(msg):
     if not msg.content:
+        return
+
+    if len(msg.content) > 140:
         return
 
     global threshold
