@@ -7,7 +7,7 @@ RUN cd /var/src/torchMoji \
  && pip install -e . \
  && yes | python scripts/download_weights.py
 
-RUN pip install smalld==0.1.3
+RUN pip install smalld==0.1.4
 
 COPY . /var/src/tweenie
 
