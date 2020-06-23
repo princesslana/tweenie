@@ -1,13 +1,12 @@
 FROM python:3.6
 
-RUN pip install torch==1.0.1
-RUN git clone https://github.com/huggingface/torchMoji.git /var/src/torchMoji
+COPY requirements.txt .
+RUN pip install -rrequirements.txt
 
-RUN cd /var/src/torchMoji \
+RUN git clone https://github.com/huggingface/torchMoji.git /var/src/torchMoji \
+ && cd /var/src/torchMoji \
  && pip install -e . \
  && yes | python scripts/download_weights.py
-
-RUN pip install smalld==0.1.4
 
 COPY . /var/src/tweenie
 
