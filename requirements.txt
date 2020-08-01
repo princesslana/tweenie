@@ -1,2 +1,2 @@
 torch==1.0.1
-smalld==0.1.6
+smalld==0.1.7
